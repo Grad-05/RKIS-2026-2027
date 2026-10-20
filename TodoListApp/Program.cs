@@ -121,6 +121,9 @@ namespace TodoListApp
             Console.WriteLine(" profile - Данные пользователя");
             Console.WriteLine(" add     - Добавить задачу (add \"текст\")");
             Console.WriteLine(" view    - Показать задачи");
+            Console.WriteLine(" done <idx>  - Отметить задачу выполненной");
+            Console.WriteLine(" delete <idx>  - Удалить задачу");
+            Console.WriteLine(" update <idx> \"текст\" - Обновить текст задачи");
             Console.WriteLine(" exit    - Выход");
         }
 
