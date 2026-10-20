@@ -1,30 +1,39 @@
 ﻿﻿using System;
+using System.Threading.Channels;
 
 namespace TodoListApp
 {
    public class Program
     {
-        static string name = "";
-        static string last_name = "";
-        static string BirthYear = "";
+        //Глобальные переменные
+        static string userFirstName = "";
+        static string userLastName = "";
+        static string birthYearInput = "";
+        //Константы
+        const int InitialArraySize = 2;
+        const int GrowthMultiplier = 2;
+        const char SpaceSeparator = ' ';
 
         public static void Main()
         {
             Console.WriteLine("Работу выполнили Нечитайлов и Шишкина\n");
+
             Console.Write("Введите ваше имя: ");
-            string name = Console.ReadLine();
+            userFirstName = Console.ReadLine();
+
             Console.Write("Введите вашу фамилию: ");
-            string last_name = Console.ReadLine();
+            userLastName = Console.ReadLine();
+
             Console.Write("Введите ваш год рождения: ");
-            string BirthYear = Console.ReadLine();
+            birthYearInput = Console.ReadLine();
 
 
-            if (int.TryParse(BirthYear, out int birthYear))
+            if (int.TryParse(birthYearInput, out int birthYear))
             {
                 int currentYear = DateTime.Now.Year;
-                int age = currentYear - birthYear;
+                int userAge = currentYear - birthYear;
 
-                Console.WriteLine("Добавлен пользователь " + name + " " + last_name + ", возраст - " + age);
+                Console.WriteLine($"Добавлен пользователь {userFirstName} {userLastName}, возраст - {userAge}" );
             }
 
             else
@@ -32,16 +41,19 @@ namespace TodoListApp
                 Console.WriteLine("Ошибка: год рождения должен быть числом!");
             }
             
-            Console.WriteLine("\nДобро пожаловать в менеджер задач! Введите 'help' для списка команд.\n");
+            Console.WriteLine("\nДля списка команд введите 'help'\n");
 
-            string[] todos = new string[2];
+            string[] todos = new string[InitialArraySize];
+            bool[] statuses = new bool[InitialArraySize];
+            DateTime[] dates = new DateTime[InitialArraySize];
 
             while (true)
             {
                 Console.Write("> ");
                 string input = Console.ReadLine();
+                if (string.IsNullOrWhiteSpace(input)) continue;
 
-                string[] parts = input.Split(new char[] { ' ' }, 2);
+                string[] parts = input.Split(new char[] { SpaceSeparator }, 2);
                 string command = parts[0].ToLower();
 
                 if (command == "help")
@@ -59,7 +71,7 @@ namespace TodoListApp
                 }
                 else if (command == "profile")
                 {
-                    Console.WriteLine($"{name} {last_name}, {BirthYear}");
+                    Console.WriteLine($"{userFirstName} {userLastName}, {birthYearInput}");
                 }
                 else if (command == "view")
                 {
@@ -119,5 +131,6 @@ namespace TodoListApp
             }
 
         }
+
     } 
 }
