@@ -60,68 +60,32 @@ namespace TodoListApp
                 {
                     ShowHelp();
                 }
-                else if (command == "exit")
-                {
-                    break;
-                }
+
                 else if (command == "profile")
                 {
                     ShowProfile();
                 }
-                else if (command == "view")
-                {
-                    Console.WriteLine("Ваши задачи:");
-                    bool isEmpty = true;
-                    
-                    for (int i = 0; i < todos.Length; i++)
-                    {
-                        if (todos[i] != null && todos[i] != "")
-                        {
-                            Console.WriteLine($"  {i + 1}. {todos[i]}");
-                            isEmpty = false;
-                        }
-                    }
-                    if (isEmpty) Console.WriteLine("  (Список пуст)");
-                }
+        
                 else if (command == "add")
                 {
                     if (parts.Length > 1)
                     {
                         string taskText = parts[1].Trim('"'); 
-
-                        int freeIndex = -1;
-                        for (int i = 0; i < todos.Length; i++)
-                        {
-                            if (todos[i] == null || todos[i] == "")
-                            {
-                                freeIndex = i;
-                                break;
-                            }
-                        }
-
-                        if (freeIndex == -1)
-                        {
-                            Console.WriteLine(" Массив заполнен, расширяем...");
-                            
-                            string[] newTodos = new string[todos.Length * 2];
-                        
-                            for (int i = 0; i < todos.Length; i++)
-                            {
-                                newTodos[i] = todos[i];
-                            }
-                            
-                            todos = newTodos; 
-                            
-                            freeIndex = todos.Length / 2; 
-                        }
-
-                        todos[freeIndex] = taskText;
-                        Console.WriteLine($" Задача \"{taskText}\" добавлена.");
+                        AddTask(taskText, ref todos, ref statuses, ref dates); //ref чтобы можно было изменять массивы
                     }
                     else
                     {
                         Console.WriteLine("Введите текст. Пример: add \"Купить хлеб\"");
                     }
+                }
+
+                else if (command == "view")
+                {
+                    ViewTasks(todos, statuses, dates);
+                }
+                else if (command == "exit")
+                {
+                    break;
                 }
             }
 
@@ -136,13 +100,46 @@ namespace TodoListApp
             Console.WriteLine(" view    - Показать задачи");
             Console.WriteLine(" exit    - Выход");
         }
+
         static void ShowProfile()
         {
             Console.WriteLine($"{userFirstName} {userLastName}, {birthYearInput}");
         }
         
-        //static void AddTask()
-        //static void ViewTasks()
+        static void AddTask(string taskText, ref string[] todos, ref bool[] statuses, ref DateTime[] dates) //ref чтобы можно было изменять массивы
+        {
+            int freeIndex = FindFreeIndex(todos);
+
+            if (freeIndex == -1)
+            {
+                Console.WriteLine("Массив заполнен, расширяем...");
+                todos = ExpandStringArray(todos);
+                statuses = ExpandBoolArray(statuses);
+                dates = ExpandDateArray(dates);
+                freeIndex = todos.Length / GrowthMultiplier;
+            }
+
+            todos[freeIndex] = taskText;
+            statuses[freeIndex] = false; 
+            dates[freeIndex] = DateTime.Now; 
+            Console.WriteLine($"Задача \"{taskText}\" добавлена.");
+        }
+        
+        static void ViewTasks(string[] todos, bool[] statuses, DateTime[] dates)
+        {
+            Console.WriteLine("Ваши задачи:");
+            bool isEmpty = true;
+            for (int i = 0; i < todos.Length; i++)
+            {
+                if (!string.IsNullOrEmpty(todos[i]))
+                {
+                    string statusText = statuses[i] ? "сделано" : "не сделано";
+                    Console.WriteLine($"  {i} {todos[i]} [{statusText}] {dates[i]:dd.MM.yyyy}");
+                    isEmpty = false;
+                }
+            }
+            if (isEmpty) Console.WriteLine("  (Список пуст)");
+        }
 
         //Доп. методы
          static string[] ExpandStringArray(string[] oldArray)
