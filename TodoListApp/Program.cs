@@ -131,6 +131,35 @@ namespace TodoListApp
             }
 
         }
+        //Доп. методы
+         static string[] ExpandStringArray(string[] oldArray)
+        {
+            string[] newArray = new string[oldArray.Length * GrowthMultiplier];
+            for (int i = 0; i < oldArray.Length; i++) newArray[i] = oldArray[i];
+            return newArray;
+        }
 
+        static bool[] ExpandBoolArray(bool[] oldArray)
+        {
+            bool[] newArray = new bool[oldArray.Length * GrowthMultiplier];
+            for (int i = 0; i < oldArray.Length; i++) newArray[i] = oldArray[i];
+            return newArray;
+        }
+
+        static DateTime[] ExpandDateArray(DateTime[] oldArray)
+        {
+            DateTime[] newArray = new DateTime[oldArray.Length * GrowthMultiplier];
+            for (int i = 0; i < oldArray.Length; i++) newArray[i] = oldArray[i];
+            return newArray;
+        }
+
+        static int FindFreeIndex(string[] todos)
+        {
+            for (int i = 0; i < todos.Length; i++)
+            {
+                if (string.IsNullOrEmpty(todos[i])) return i;
+            }
+            return -1;
+        } 
     } 
 }
