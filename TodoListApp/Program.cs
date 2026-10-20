@@ -73,20 +73,43 @@ namespace TodoListApp
                         string taskText = parts[1].Trim('"'); 
                         AddTask(taskText, ref todos, ref statuses, ref dates); //ref чтобы можно было изменять массивы
                     }
-                    else
-                    {
-                        Console.WriteLine("Введите текст. Пример: add \"Купить хлеб\"");
-                    }
                 }
 
                 else if (command == "view")
                 {
                     ViewTasks(todos, statuses, dates);
                 }
+
+                else if (command == "done")
+                {
+                    if (parts.Length > 1 && int.TryParse(parts[1], out int index))
+                        MarkTaskDone(index, statuses, dates);
+                }
+
+                else if (command == "delete")
+                {
+                    if (parts.Length > 1 && int.TryParse(parts[1], out int index))
+                        DeleteTask(index, todos, statuses, dates);
+                }
+
+                else if (command == "update")
+                {
+                    if (parts.Length > 1)
+                    {
+                        string[] updateParts = parts[1].Split(new char[] { SpaceSeparator }, 2);
+                        if (updateParts.Length > 1 && int.TryParse(updateParts[0], out int index))
+                        {
+                            string newText = updateParts[1].Trim('"');
+                            UpdateTask(index, newText, todos, dates);
+                        }
+                    }
+                }
+
                 else if (command == "exit")
                 {
                     break;
                 }
+                
             }
 
         }
@@ -124,7 +147,7 @@ namespace TodoListApp
             dates[freeIndex] = DateTime.Now; 
             Console.WriteLine($"Задача \"{taskText}\" добавлена.");
         }
-        
+
         static void ViewTasks(string[] todos, bool[] statuses, DateTime[] dates)
         {
             Console.WriteLine("Ваши задачи:");
@@ -139,6 +162,58 @@ namespace TodoListApp
                 }
             }
             if (isEmpty) Console.WriteLine("  (Список пуст)");
+        }
+
+        static void MarkTaskDone(int index, bool[] statuses, DateTime[] dates)
+        {
+            if (index >= 0 && index < statuses.Length && !string.IsNullOrEmpty(dates[index].ToString()))
+            {
+                statuses[index] = true;
+                dates[index] = DateTime.Now; 
+                Console.WriteLine($"Задача {index} выполнена.");
+            }
+            else
+            {
+                Console.WriteLine("Ошибка: неверный индекс.");
+            }
+        }
+
+
+        static void DeleteTask(int index, string[] todos, bool[] statuses, DateTime[] dates)
+        {
+            if (index >= 0 && index < todos.Length && !string.IsNullOrEmpty(todos[index]))
+            {
+                for (int i = index; i < todos.Length - 1; i++)
+                {
+                    todos[i] = todos[i + 1];
+                    statuses[i] = statuses[i + 1];
+                    dates[i] = dates[i + 1];
+                }
+
+                todos[todos.Length - 1] = null;
+                statuses[statuses.Length - 1] = false;
+                dates[dates.Length - 1] = default(DateTime);
+                Console.WriteLine($"Задача {index} удалена.");
+            }
+            else
+            {
+                Console.WriteLine("Ошибка: неверный индекс.");
+            }
+        }
+
+
+        static void UpdateTask(int index, string newText, string[] todos, DateTime[] dates)
+        {
+            if (index >= 0 && index < todos.Length && !string.IsNullOrEmpty(todos[index]))
+            {
+                todos[index] = newText;
+                dates[index] = DateTime.Now;
+                Console.WriteLine($"Задача {index} обновлена.");
+            }
+            else
+            {
+                Console.WriteLine("Ошибка: неверный индекс.");
+            }
         }
 
         //Доп. методы
