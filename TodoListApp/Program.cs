@@ -58,12 +58,7 @@ namespace TodoListApp
 
                 if (command == "help")
                 {
-                    Console.WriteLine("Доступные команды:");
-                    Console.WriteLine("  help    - Список команд");
-                    Console.WriteLine("  profile - Данные пользователя");
-                    Console.WriteLine("  add     - Добавить задачу (add \"текст\")");
-                    Console.WriteLine("  view    - Показать задачи");
-                    Console.WriteLine("  exit    - Выход");
+                    ShowHelp();
                 }
                 else if (command == "exit")
                 {
@@ -71,7 +66,7 @@ namespace TodoListApp
                 }
                 else if (command == "profile")
                 {
-                    Console.WriteLine($"{userFirstName} {userLastName}, {birthYearInput}");
+                    ShowProfile();
                 }
                 else if (command == "view")
                 {
@@ -131,6 +126,24 @@ namespace TodoListApp
             }
 
         }
+        //Методы
+        static void ShowHelp()
+        {
+            Console.WriteLine("Доступные команды:");
+            Console.WriteLine(" help    - Список команд");
+            Console.WriteLine(" profile - Данные пользователя");
+            Console.WriteLine(" add     - Добавить задачу (add \"текст\")");
+            Console.WriteLine(" view    - Показать задачи");
+            Console.WriteLine(" exit    - Выход");
+        }
+        static void ShowProfile()
+        {
+            Console.WriteLine($"{userFirstName} {userLastName}, {birthYearInput}");
+        }
+        
+        //static void AddTask()
+        //static void ViewTasks()
+
         //Доп. методы
          static string[] ExpandStringArray(string[] oldArray)
         {
