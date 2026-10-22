@@ -53,8 +53,9 @@ namespace TodoListApp
                 string input = Console.ReadLine();
                 if (string.IsNullOrWhiteSpace(input)) continue;
 
-                string[] parts = input.Split(new char[] { SpaceSeparator }, 2);
+                string[] parts = input.Split(new char[] { SpaceSeparator }, 2, StringSplitOptions.RemoveEmptyEntries);
                 string command = parts[0].ToLower();
+                string arguments = parts.Length > 1 ? parts[1]: "";
 
                 if (command == "help")
                 {
