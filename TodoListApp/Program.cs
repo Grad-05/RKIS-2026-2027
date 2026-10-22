@@ -119,6 +119,18 @@ namespace TodoListApp
                     }
                 }
 
+                else if (command == "read")
+                {
+                    if (parts.Length > 1 && int.TryParse(parts[1], out int index))
+                    {
+                        ReadTask(index, todos, statuses, dates);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Ошибка: введите индекс.");
+                    }
+                }
+
                 else if (command == "exit")
                 {
                     break;
@@ -287,6 +299,20 @@ namespace TodoListApp
                 result += line;
             }
             return result;
+        }
+
+          static void ReadTask(int index, string[] todos, bool[] statuses, DateTime[] dates)
+        {
+            if (index < 0 || index >= todos.Length || string.IsNullOrEmpty(todos[index]))
+            {
+                Console.WriteLine("Ошибка: неверный индекс или задача пуста.");
+                return;
+            }
+
+            Console.WriteLine($"Задача #{index}");
+            Console.WriteLine($"Текст:\n{todos[index]}");
+            Console.WriteLine($"Статус: {(statuses[index] ? "выполнена" : "не выполнена")}");
+            Console.WriteLine($"Дата изменения: {dates[index]:dd.MM.yyyy HH:mm}");
         }
 
         //Доп. методы
