@@ -143,14 +143,20 @@ namespace TodoListApp
         static void ShowHelp()
         {
             Console.WriteLine("Доступные команды:");
-            Console.WriteLine(" help    - Список команд");
-            Console.WriteLine(" profile - Данные пользователя");
-            Console.WriteLine(" add     - Добавить задачу (add \"текст\")");
-            Console.WriteLine(" view    - Показать задачи");
-            Console.WriteLine(" done <idx>  - Отметить задачу выполненной");
-            Console.WriteLine(" delete <idx>  - Удалить задачу");
-            Console.WriteLine(" update <idx> \"текст\" - Обновить текст задачи");
-            Console.WriteLine(" exit    - Выход");
+            Console.WriteLine("  help            - Список команд");
+            Console.WriteLine("  profile         - Данные пользователя");
+            Console.WriteLine("  add \"текст\"      - Добавить задачу");
+            Console.WriteLine("  add -m          - Многострочный ввод (завершение !end)");
+            Console.WriteLine("  view            - Показать задачи (только текст)");
+            Console.WriteLine("  view -i         - Показать с индексами");
+            Console.WriteLine("  view -s         - Показать со статусами");
+            Console.WriteLine("  view -d         - Показать с датами");
+            Console.WriteLine("  view -a         - Показать всё");
+            Console.WriteLine("  read <idx>      - Полный текст задачи, статус, дата");
+            Console.WriteLine("  done <idx>      - Отметить задачу выполненной");
+            Console.WriteLine("  delete <idx>    - Удалить задачу");
+            Console.WriteLine("  update <idx> \"текст\" - Обновить текст задачи");
+            Console.WriteLine("  exit            - Выход");
         }
 
         static void ShowProfile()
