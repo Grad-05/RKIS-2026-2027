@@ -1,5 +1,4 @@
 ﻿﻿using System;
-using System.Threading.Channels;
 
 namespace TodoListApp
 {
@@ -69,11 +68,25 @@ namespace TodoListApp
         
                 else if (command == "add")
                 {
-                    if (parts.Length > 1)
+                    string taskText = "";
+
+                    if (arguments.Contains("--multiline") || arguments.Contains("-m"))
                     {
-                        string taskText = parts[1].Trim('"'); 
-                        AddTask(taskText, ref todos, ref statuses, ref dates); //ref чтобы можно было изменять массивы
+                        taskText = ReadMultilineTask();
                     }
+                    else
+                    {
+                        if (parts.Length > 1)
+                        {
+                            taskText = parts[1].Trim('"'); 
+                        }
+                    }
+
+                    if (!string.IsNullOrEmpty(taskText))
+                    {
+                        AddTask(taskText, ref todos, ref statuses, ref dates);
+                    }
+                    
                 }
 
                 else if (command == "view")
@@ -218,6 +231,21 @@ namespace TodoListApp
             {
                 Console.WriteLine("Ошибка: неверный индекс.");
             }
+        }
+       static string ReadMultilineTask()
+        {
+            Console.WriteLine("Введите строки задачи (для завершения введите !end):");
+            string result = "";
+            while (true)
+            {
+                Console.Write("> ");
+                string line = Console.ReadLine();
+                if (line == null || line.Trim() == "!end") break;
+                
+                if (result != "") result += "\n";
+                result += line;
+            }
+            return result;
         }
 
         //Доп. методы
