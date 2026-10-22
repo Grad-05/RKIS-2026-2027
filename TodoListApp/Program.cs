@@ -91,7 +91,7 @@ namespace TodoListApp
 
                 else if (command == "view")
                 {
-                    ViewTasks(todos, statuses, dates);
+                    ViewTasks(arguments,todos, statuses, dates);
                 }
 
                 else if (command == "done")
@@ -165,19 +165,60 @@ namespace TodoListApp
             Console.WriteLine($"Задача \"{taskText}\" добавлена.");
         }
 
-        static void ViewTasks(string[] todos, bool[] statuses, DateTime[] dates)
+        static void ViewTasks(string arguments, string[] todos, bool[] statuses, DateTime[] dates)
         {
+            bool showIndex = arguments.Contains("--index") || arguments.Contains("-i");
+            bool showStatus = arguments.Contains("--status") || arguments.Contains("-s");
+            bool showDate = arguments.Contains("--update-date") || arguments.Contains("-d");
+            bool showAll = arguments.Contains("--all") || arguments.Contains("-a");
+
+            if (showAll)
+            {
+                showIndex = true;
+                showStatus = true;
+                showDate = true;
+            }
+
             Console.WriteLine("Ваши задачи:");
+
+            if (showIndex) Console.Write($"{ "Idx",-4} | ");
+            Console.Write($"{ "Задача",-32} | ");
+            if (showStatus) Console.Write($"{ "Статус",-12} | ");
+            if (showDate) Console.Write($"{ "Дата",-10} | ");
+            Console.WriteLine();
+            Console.WriteLine(new string('-', 70));
+            
+
             bool isEmpty = true;
             for (int i = 0; i < todos.Length; i++)
             {
                 if (!string.IsNullOrEmpty(todos[i]))
                 {
-                    string statusText = statuses[i] ? "сделано" : "не сделано";
-                    Console.WriteLine($"  {i} {todos[i]} [{statusText}] {dates[i]:dd.MM.yyyy}");
                     isEmpty = false;
+
+                    string taskText = todos[i];
+                    taskText = taskText.Replace("\n", " ");
+                    if (taskText.Length > 30)
+                    {
+                        taskText = taskText.Substring(0, 27) + "...";
+                    }
+
+                    if (showIndex) Console.Write($"{i,-4} | ");
+                    Console.Write($"{taskText,-32} | ");
+                    if (showStatus) 
+                    {
+                        string statusText = statuses[i] ? "сделано" : "не сделано";
+                        Console.Write($"{statusText,-12} | ");
+                    }
+                    if (showDate) 
+                    {
+                        string formattedDate = dates[i].ToString("dd.MM.yyyy");
+                        Console.Write($"{formattedDate,-10} | ");
+                    }
+                    Console.WriteLine();
                 }
             }
+
             if (isEmpty) Console.WriteLine("  (Список пуст)");
         }
 
