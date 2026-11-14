@@ -8,6 +8,11 @@ namespace TodoListApp
         private int _count;
         private const int InitialSize = 2;
 
+        public int Count
+        {
+            get { return _count; }
+        }
+
         public TodoList()
         {
             _items = new TodoItem[InitialSize];
